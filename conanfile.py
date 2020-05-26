@@ -32,15 +32,13 @@ class LibuvConan(ConanFile):
         del self.settings.compiler.cppstd
 
     def source(self):
-        tools.get(**self.conan_data["sources"][self.version])
-        extracted_dir = f'{self.name}-{self.version}'
-        os.rename(extracted_dir, self._source_subfolder)
+        tools.rmdir(self._source_subfolder)
+        git = tools.Git(folder=self._source_subfolder)
+        git.clone("https://github.com/Arenoros/libuv.git", 'v1.x')
 
     def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions['CMAKE_INSTALL_PREFIX']='out'
-        #if self.settings.os == "Windows":
-            
         cmake.configure()
         return cmake
 
@@ -72,7 +70,7 @@ class LibuvConan(ConanFile):
             self.cpp_info.libs.extend(["Psapi", "Ws2_32", "Iphlpapi", "Userenv"])
         else:
             self.cpp_info.libs = tools.collect_libs(self)
-            if not self.settings.os in ["Android"]:
+            if not self.settings.os in ["Android", "Neutrino"]:
                 self.cpp_info.libs.append("pthread")
             if not self.settings.os in ["SunOS", 'AIX']:
                 self.cpp_info.libs.append("dl")

@@ -15,10 +15,8 @@ typedef struct {
 } worker_config;
 
 static void worker(void* arg) {
-	printf("worker\n");
-
 	worker_config* wc = (worker_config*) arg;
-
+	printf("worker\n");
 	uv_mutex_lock(&wc->mutex);
 	uv_cond_signal(&wc->cond);
 	uv_mutex_unlock(&wc->mutex);
