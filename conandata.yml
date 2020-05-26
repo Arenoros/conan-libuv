@@ -1,0 +1,7 @@
+sources:
+  '1.31.0':
+    sha256: ab041ea5d1965a33d4e03ea87718b8922ba4e54abb46c71cf9e040edef2556c0
+    url: https://github.com/libuv/libuv/archive/v1.31.0.zip
+  '1.38.0':
+    sha256: 6502EE75E1007325BA2E15E06D3D7B94AC911704793B2FE6F7BB933E1748DB72
+    url: https://github.com/libuv/libuv/archive/v1.38.0.zip
