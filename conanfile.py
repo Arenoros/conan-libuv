@@ -53,20 +53,20 @@ class LibuvConan(ConanFile):
         if self.settings.os in ["Windows", "WindowsCE"]:
             self.copy(pattern="LICENSE*", dst="licenses", src='out')
             if self.options.shared:
-                self.copy(pattern="uv.dll", dst="bin", src=f'out/lib/{self.settings.build_type}')
+                self.copy(pattern="uv.dll", dst="bin", src=f'out/lib/{self.settings.build_type}', keep_path=False)
                 self.copy(pattern="uv.lib", dst="lib", src=f'out/lib/{self.settings.build_type}')
             else:
-                self.copy(pattern="uv_a.lib", dst="lib", src=f'out/lib/{self.settings.build_type}')
+                self.copy(pattern="uv_a.lib", dst="lib/uv.lib", src=f'out/lib/{self.settings.build_type}')
         else:
             self.copy(pattern="*", dst="share", src='out/share')
             if self.options.shared:
-                self.copy(pattern="libuv.so*", dst="lib", src='out/lib')
+                self.copy(pattern="libuv.so*", dst="lib", src='out/lib', symlinks=True, keep_path=False)
             else:
-                self.copy(pattern="libuv_a*", dst="lib", src='out/lib')
+                self.copy(pattern="libuv_a.a", dst="lib", src='out/lib')
 
     def package_info(self):
         if self.settings.os in ["Windows", "WindowsCE"]:
-            self.cpp_info.libs = ["uv.dll" if self.options.shared else "uv_a"]
+            self.cpp_info.libs = ["uv.dll" if self.options.shared else "uv_a.lib"]
             self.cpp_info.libs.extend(["Psapi", "Ws2_32", "Iphlpapi", "Userenv"])
         else:
             self.cpp_info.libs = tools.collect_libs(self)
